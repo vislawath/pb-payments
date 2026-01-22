@@ -35,6 +35,12 @@ const ERROR_MESSAGES = {
     code: 'INVALID_AMOUNT',
     message: 'The payment amount is invalid.',
     userFriendly: 'The payment amount is invalid. Please check the amount and try again.'
+  },
+  
+  CVV_INVALID: {
+    code: 'CVV_INVALID',
+    message: 'The CVV code is invalid.',
+    userFriendly: 'The security code (CVV) on your card is incorrect. Please check and try again.'
   }
 };
 
@@ -46,7 +52,20 @@ function getErrorMessage(errorCode) {
   };
 }
 
+function formatErrorResponse(errorCode, details = {}) {
+  const error = getErrorMessage(errorCode);
+  return {
+    error: {
+      code: error.code,
+      message: error.userFriendly,
+      details: details,
+      timestamp: new Date().toISOString()
+    }
+  };
+}
+
 module.exports = {
   ERROR_MESSAGES,
-  getErrorMessage
+  getErrorMessage,
+  formatErrorResponse
 };
