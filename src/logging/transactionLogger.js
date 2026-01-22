@@ -58,6 +58,27 @@ class TransactionLogger {
       console.error('Failed to write payment attempt log:', error);
     }
   }
+  
+  async logFailure(failure) {
+    const timestamp = new Date().toISOString();
+    const logEntry = {
+      timestamp,
+      type: 'PAYMENT_FAILURE',
+      transactionId: failure.transactionId,
+      reason: failure.reason,
+      errorCode: failure.errorCode,
+      userId: failure.userId
+    };
+    
+    const logFile = path.join(this.logDir, `transactions-${new Date().toISOString().split('T')[0]}.log`);
+    const logLine = JSON.stringify(logEntry) + '\n';
+    
+    try {
+      await fs.appendFile(logFile, logLine);
+    } catch (error) {
+      console.error('Failed to write failure log:', error);
+    }
+  }
 }
 
 module.exports = TransactionLogger;
