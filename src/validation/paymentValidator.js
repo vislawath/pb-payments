@@ -50,7 +50,22 @@ function validateExpiryDate(expiryDate) {
   return expiry > now;
 }
 
+/**
+ * Detect card type for better validation
+ */
+function detectCardType(cardNumber) {
+  const cleaned = cardNumber.replace(/[\s-]/g, '');
+  
+  if (/^4/.test(cleaned)) return 'VISA';
+  if (/^5[1-5]/.test(cleaned)) return 'MASTERCARD';
+  if (/^3[47]/.test(cleaned)) return 'AMEX';
+  if (/^6/.test(cleaned)) return 'DISCOVER';
+  
+  return 'UNKNOWN';
+}
+
 module.exports = {
   validateCardNumber,
-  validateExpiryDate
+  validateExpiryDate,
+  detectCardType
 };
