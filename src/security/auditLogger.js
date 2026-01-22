@@ -64,6 +64,15 @@ class SecurityAuditLogger {
       resource: event.resource || 'data'
     });
   }
+  
+  async logSecurityViolation(event) {
+    await this.logSecurityEvent({
+      ...event,
+      type: 'SECURITY_VIOLATION',
+      severity: 'HIGH',
+      resource: event.resource || 'system'
+    });
+  }
 }
 
 module.exports = SecurityAuditLogger;
