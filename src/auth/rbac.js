@@ -20,6 +20,12 @@ class RoleBasedAccessControl {
         write: ['admin'],
         delete: ['admin'],
         manage: ['admin']
+      },
+      users: {
+        read: ['admin'],
+        write: ['admin'],
+        delete: ['admin'],
+        manage: ['admin']
       }
     };
   }
@@ -52,6 +58,21 @@ class RoleBasedAccessControl {
    */
   canAccess(userRole, resource, action) {
     return this.hasPermission(userRole, resource, action);
+  }
+  
+  /**
+   * Middleware for Express routes
+   */
+  middleware(resource, action) {
+    return (req, res, next) => {
+      const userRole = req.user?.role || 'viewer';
+      
+      if (!this.canAccess(userRole, resource, action)) {
+        return res.status(403).json({ error: 'Forbidden: Insufficient permissions' });
+      }
+      
+      next();
+    };
   }
 }
 
