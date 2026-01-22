@@ -59,6 +59,21 @@ class PaymentSecurityCompliance {
       violations
     };
   }
+  
+  /**
+   * Generate compliance report
+   */
+  generateComplianceReport(paymentData) {
+    const compliance = this.checkPCICompliance(paymentData);
+    const validation = this.validateSecurityStandards(paymentData);
+    
+    return {
+      timestamp: new Date().toISOString(),
+      compliance,
+      validation,
+      overallStatus: compliance.compliant && validation.valid ? 'COMPLIANT' : 'NON_COMPLIANT'
+    };
+  }
 }
 
 module.exports = PaymentSecurityCompliance;
