@@ -54,6 +54,30 @@ router.post('/refunds', async (req, res) => {
   }
 });
 
+/**
+ * GET /api/refunds/:refundId
+ * Get refund status
+ */
+router.get('/refunds/:refundId', async (req, res) => {
+  try {
+    const { refundId } = req.params;
+    const refund = await getRefundById(refundId);
+    
+    if (!refund) {
+      return res.status(404).json({ 
+        error: 'Refund not found' 
+      });
+    }
+    
+    res.status(200).json(refund);
+  } catch (error) {
+    res.status(500).json({ 
+      error: 'Failed to retrieve refund',
+      message: error.message 
+    });
+  }
+});
+
 async function getTransactionById(transactionId) {
   // Implementation to fetch transaction from database
   return null; // Placeholder
@@ -61,6 +85,11 @@ async function getTransactionById(transactionId) {
 
 async function processRefund(transactionId, amount, reason) {
   // Implementation to process refund
+}
+
+async function getRefundById(refundId) {
+  // Implementation to fetch refund from database
+  return null; // Placeholder
 }
 
 module.exports = router;
