@@ -33,6 +33,12 @@ router.post('/stripe', express.raw({ type: 'application/json' }), async (req, re
     case 'charge.refunded':
       await handleRefund(event.data.object);
       break;
+    case 'customer.subscription.created':
+      await handleSubscriptionCreated(event.data.object);
+      break;
+    case 'customer.subscription.updated':
+      await handleSubscriptionUpdated(event.data.object);
+      break;
     default:
       console.log(`Unhandled event type: ${event.type}`);
   }
@@ -65,6 +71,16 @@ async function handlePaymentFailed(paymentIntent) {
 async function handleRefund(charge) {
   console.log('Refund processed:', charge.id);
   // Process refund
+}
+
+async function handleSubscriptionCreated(subscription) {
+  console.log('Subscription created:', subscription.id);
+  // Handle new subscription
+}
+
+async function handleSubscriptionUpdated(subscription) {
+  console.log('Subscription updated:', subscription.id);
+  // Handle subscription update
 }
 
 module.exports = router;
